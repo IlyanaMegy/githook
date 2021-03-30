@@ -28,10 +28,41 @@ sudo ifup enp0s3
 You're now able to see your static IP address by using the cmd `ip a`.
 We can now connect to your local machine with SSH and also to share some files and so will you !
 
+Also let's give to user all rights just like root have.
+
+    su
+    usermod -aG root user
+then modify /etc/sudoers file and add this like under root's one:
+
+    user	ALL=(ALL)	NOPASSWD: ALL
+
 ## 2. SSH-keygen
 
 To simplify your interactions with your server, you better set-up a password-less ssh login. 
 -> Execute the **generate_SSH_key.sh** file.
+
+Don't forget to configure the **/etc/ssh/sshd_config** file !
+-> Change the parameter in PasswordAuthentication to:
+
+    PasswordAuthentication no
+```
+systemctl restart sshd
+```
+
+/!\ If you get this error while trying to connect with SSH : 
+```output
+Permission denied (publickey,gssapi-keyex,gssapi-with-mic)
+``` 
+Check on your **/home/your_name** and ./ssh folders permissions ; 
+
+    sudo chmod 0700 /home/your_name
+    sudo chmod 0700 /home/your_name/.ssh
+
+Then check on the /.ssh/authorized_keys file ;
+
+    sudo chmod 0600 /home/your_name/.ssh/authorized_keys
+
+Now it should works, if it doesn't refer to [this tutorial](https://phoenixnap.com/kb/ssh-permission-denied-publickey) .
 
 ## 3. Install git
 
@@ -49,12 +80,13 @@ Then we will install it on your VM, follow those commands :
 yum install git-core -y
 
 #create git user
-useradd git
+sudo useradd git
 echo  "root" | passwd --stdin git
 usermod -aG wheel git
 
 #create the saved-files-folder and git init
 mkdir /home/git/clone
+
 cd /home/git/clone && git init --bare
 ```
 
@@ -83,4 +115,8 @@ We will just ask git to execute our unit test just before it commits our code.
 ## 4. Unit test to make my code perfect
 
 In this example the unit test developped with dotnet will check on the code and see if it contains any non-english character in variables names (for example é, à or ù).
+
+First you'll send the CleanerApp folder to your server machine with the scp command.
+
+    scp -r CleanerApp\ user@192.168.30.10:/home/user
 
