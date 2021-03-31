@@ -116,7 +116,9 @@ We will just ask git to execute our unit test just before it commits our code.
 
 In this example the unit test developped with dotnet will check on the code and see if it contains any non-english character in variables names (for example é, à or ù).
 
-First you'll send the CleanerApp folder to your server machine with the scp command.
+You'll send the CleanerApp folder to your server machine and then copy the bash script into a pre-commit file
 
     scp -r CleanerApp\ user@192.168.30.10:/home/user
+    ssh user@192.168.30.10 "cp /home/user/CleanerApp/CleanMyCode.sh /home/git/clone/hooks/pre-commit"
+    ssh user@192.168.30.10 "chmod +x /home/git/clone/hooks/pre-commit"
 

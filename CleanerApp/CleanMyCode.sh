@@ -61,7 +61,7 @@ then
         newArr=()
         arrLen=0
 
-        cd CleanerApp/CleanerApp
+        cd /home/git/clone/CleanerApp/CleanerApp
             for value in $str; do
                 oldArr+=("$value"); 
                 res=$(dotnet run Program.cs $value); 
@@ -122,12 +122,3 @@ else
 fi
 exit $exit_code
 
-if [ -z "$1" ]; then    #empty param
-  echo "You have to enter the complete file's name you want to clean."
-  exit 1
-else
-    if [[ $1 != *.* ]] ; then   #extension missing
-        echo "You have to enter the complete file's name you want to clean, don't forget the file's extension."
-        exit 2
-    fi
-fi
